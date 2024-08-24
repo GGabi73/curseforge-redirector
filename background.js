@@ -1,7 +1,15 @@
-chrome.webRequest.onBeforeRequest.addListener(
-  function(details) {
-    return {redirectUrl: details.url.replace('www.curseforge.com', 'legacy.curseforge.com')};
-  },
-  {urls: ["*://www.curseforge.com/*"]},
-  ["blocking"]
-);
+chrome.declarativeNetRequest.updateDynamicRules({
+  addRules: [{
+    "id": 1,
+    "priority": 1,
+    "action": { 
+      "type": "redirect", 
+      "redirect": { "transform": { "host": "legacy.curseforge.com" } } 
+    },
+    "condition": {
+      "urlFilter": "*://www.curseforge.com/*",
+      "resourceTypes": ["main_frame"]
+    }
+  }],
+  removeRuleIds: [1]
+});
